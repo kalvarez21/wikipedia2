@@ -11,12 +11,26 @@ my $title = $q->param('title');
 my $text = $q->param('text');
 my $owner = $q->param('owner');
 
-if(defined($title) && defined($text) && defined($owner)){
+if(checkOwner($owner) && defined($title) && defined($text) && defined($owner)){
   insertaBD($title, $text, $owner);
   my $cuerpoXML= renderBody($title, $text);
   print renderXML($cuerpoXML);
 }else{
   print renderXML();
+}
+sub checkOwner{
+  my $user = 'alumno';
+  my $password = 'pweb1';
+  my $owner = $_[0];
+  my $dsn = 'DBI:MariaDB:database=pweb1;host=192.168.1.54';
+  my $dbh = DBI->connect($dsn, $user, $password) or die("No se pudo conectar!");
+  my $sql = "SELECT * FROM Users WHERE userName=?";
+  my $sth = $dbh->prepare($sql);
+  $sth->execute($owner);
+  my @row = $sth->fetchrow_array;
+  $sth->finish;
+  $dbh->disconnect;
+  return @row;
 }
 sub insertaBD{
   my $user = 'alumno';
