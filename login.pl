@@ -10,9 +10,10 @@ print $q->header('text/xml');
 
 my $user = $q->param('user');
 my $password = $q->param('password');
-
+#my $user = "A";
+#my $password = "123";
 if(defined($user) and defined($password)){
-    @datos = checkLogin($user, $password);
+    my @datos = checkLogin($user, $password);
     if(@datos){
       print renderBody(@datos);
     }else{
@@ -41,11 +42,8 @@ sub checkLogin{
 }
 sub notFound{
   my $body = << "XML";
-  <?xml version='1.0' encoding='utf-8'?> 
+<?xml version='1.0' encoding='utf-8'?> 
   <user>
-    <owner></owner>
-    <firstName></firstName>
-    <lastName></lastName>
   </user>
 XML
   return $body;
@@ -55,7 +53,7 @@ sub renderBody{
   my $firstName = $_[3];
   my $lastName = $_[2];
   my $body = << "XML";
-  <?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='utf-8'?>
     <user>
       <owner>$owner</owner>
       <firstName>$firstName</firstName>
