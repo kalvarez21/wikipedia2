@@ -10,22 +10,23 @@ print $q->header('text/xml');
 my $title = $q->param('title');
 my $owner = $q->param('owner');
 
-if(defined($title) && defined($owner) && checkOwner($owner)){
+if(defined($title) && defined($owner) && check($title, $owner)){
   deleteArticle($title, $owner);
   my $cuerpoXML= renderBody($title);
   print renderXML($cuerpoXML);
 }else{
   print renderXML();
 }
-sub checkOwner{
+sub check{
   my $user = 'alumno';
   my $password = 'pweb1';
-  my $owner = $_[0];
+  my $title = $_[0];
+  my $owner = $_[1];
   my $dsn = 'DBI:MariaDB:database=pweb1;host=192.168.1.54';
   my $dbh = DBI->connect($dsn, $user, $password) or die("No se pudo conectar!");
-  my $sql = "SELECT * FROM Users WHERE userName=?";
+  my $sql = "SELECT * FROM Articles WHERE title=? AND owner=?";
   my $sth = $dbh->prepare($sql);
-  $sth->execute($owner);
+  $sth->execute($title, $owner);
   my @row = $sth->fetchrow_array;
   $sth->finish;
   $dbh->disconnect;
