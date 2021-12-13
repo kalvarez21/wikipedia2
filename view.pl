@@ -46,7 +46,7 @@ HTML
 return $html;
 }
 
-sub renderbody{
+sub renderBody{
   my $texto = $_[0];
   my $line = "";
   my $body = "";
