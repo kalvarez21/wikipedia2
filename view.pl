@@ -39,7 +39,6 @@ sub renderHTML{
     $cuerpo .= $_[0];
   }
     my $html = <<"HTML";
-<!DOCTYPE html>
     <p>
       $cuerpo
     <p>
